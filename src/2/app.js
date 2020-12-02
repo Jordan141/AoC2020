@@ -36,7 +36,7 @@ function partTwo(list) {
 
         const checkOne = password[min - 1] === identifier
         const checkTwo = password[max - 1] === identifier
-        return (!(checkOne && checkTwo)  && (checkOne || checkTwo))
+        return checkOne ^ checkTwo
     })
 
     return validPasswords.length
