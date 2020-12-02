@@ -17,36 +17,34 @@ function policyMaker(str) {
     }
 }
 
-function partOne(list) {
-     let validPasswords = list.filter(item => {
+function prepareList(list, cb) {
+    let validPasswords = list.filter(item => {
         const password = item.password
         const {min, max, identifier} = item.policy
-
-        const identifierAmount = password.split('').filter(letter => letter === identifier).length
-        return (identifierAmount >= min && identifierAmount <= max)
+        return cb(password, identifier, min, max)
     })
 
     return validPasswords.length
 }
 
-function partTwo(list) {
-    const validPasswords = list.filter(item => {
-        const password = item.password
-        const {min, max, identifier} = item.policy
+function partOne(password, identifier, min, max) {
+    const identifierAmount = password.split('')
+        .filter(letter => letter === identifier)
+        .length
 
-        const checkOne = password[min - 1] === identifier
-        const checkTwo = password[max - 1] === identifier
-        return checkOne ^ checkTwo
-    })
+    return (identifierAmount >= min && identifierAmount <= max)
+}
 
-    return validPasswords.length
+function partTwo(password, identifier, min, max) {
+    const checkOne = password[min - 1] === identifier
+    const checkTwo = password[max - 1] === identifier
+    return checkOne ^ checkTwo
 }
 
 const policyList = input.map(policyMaker)
 
-const validPasswords = partOne(policyList)
+const validPasswords = prepareList(policyList, partOne)
 console.log(validPasswords)
 
-//Tobaggan indices start from 1
-const validTobagganPasswords = partTwo(policyList)
+const validTobagganPasswords = prepareList(policyList, partTwo)
 console.log(validTobagganPasswords)
