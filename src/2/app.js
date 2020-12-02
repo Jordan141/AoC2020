@@ -18,13 +18,15 @@ function policyMaker(str) {
 }
 
 function partOne(list) {
-    let validPasswords = 0
-    list.forEach(elem => {
-        const identifierAmount = elem.password.split('').filter(letter => letter === elem.policy.identifier).length
-        if(identifierAmount >= elem.policy.min && identifierAmount <= elem.policy.max) validPasswords++
+     let validPasswords = list.filter(item => {
+        const password = item.password
+        const {min, max, identifier} = item.policy
+
+        const identifierAmount = password.split('').filter(letter => letter === identifier).length
+        return (identifierAmount >= min && identifierAmount <= max)
     })
 
-    return validPasswords
+    return validPasswords.length
 }
 
 function partTwo(list) {
