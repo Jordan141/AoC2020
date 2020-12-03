@@ -26,4 +26,11 @@ function travelSlope(dx, dy, map) {
 }
 
 const gridMap = makeMap(input.map(line => [...line]))
+const slopes = [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]]
+
+//Part One
 console.log(travelSlope(3, 1, gridMap))
+
+//Part Two
+const treeAmount = slopes.reduce((totalTrees, currSlope) => totalTrees *= travelSlope(...currSlope, gridMap), 1)
+console.log(treeAmount)
