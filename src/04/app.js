@@ -5,6 +5,7 @@ const _ = require('lodash')
 const VALID_FIELDS = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
 const HEX_CODE_REGEX = new RegExp(/#([a-f0-9]{3}){1,2}\b/i)
 const VALID_EYE_COLOURS = ['amb', 'blu', 'brn', 'grn', 'gry', 'hzl', 'oth']
+const DEFAULT_CID_RETURN_VALUE = true
 const PID_LENGTH = 9
 
 const verifyFields = {
@@ -19,21 +20,21 @@ const verifyFields = {
     hcl: (str) => str.match(HEX_CODE_REGEX),
     ecl: (str) => VALID_EYE_COLOURS.includes(str),
     pid: (str) => str.length === PID_LENGTH,
-    cid: () => true
+    cid: () => DEFAULT_CID_RETURN_VALUE
 
 }
 
-function validItem(item) {
-    return VALID_FIELDS.every(i => item.match(new RegExp(i)))
+function validPassportCategories(data) {
+    return VALID_FIELDS.every(i => data.match(new RegExp(i)))
 }
 
-const validPassports = input.filter(validItem)
+const validPassports = input.filter(validPassportCategories)
 console.log(validPassports.length)
 
 function verifyData(data) {
-    const items = data.split(/\s|\n/).map(line => line.split(':'))
-    const validItem = items.every(item => verifyFields[item[0]](item[1]))
-    return validItem
+    const passportData = data.split(/\s|\n/).map(line => line.split(':'))
+    const isPassportValid = passportData.every(field => verifyFields[field[0]](field[1]))
+    return isPassportValid
 }
 
 const verifiedPassports = validPassports.filter(verifyData)
