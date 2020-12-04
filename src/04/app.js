@@ -28,14 +28,16 @@ function validPassportCategories(data) {
     return VALID_FIELDS.every(i => data.match(new RegExp(i)))
 }
 
-const validPassports = input.filter(validPassportCategories)
-console.log(validPassports.length)
-
 function verifyData(data) {
     const passportData = data.split(/\s|\n/).map(line => line.split(':'))
     const isPassportValid = passportData.every(field => verifyFields[field[0]](field[1]))
     return isPassportValid
 }
 
+console.time('Computations start...')
+const validPassports = input.filter(validPassportCategories)
 const verifiedPassports = validPassports.filter(verifyData)
+console.timeEnd('Computations start...')
+
+console.log(validPassports.length)
 console.log(verifiedPassports.length)
