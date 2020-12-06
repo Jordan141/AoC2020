@@ -1,8 +1,6 @@
 const { find } = require('lodash')
 
 const raw = require('fs').readFileSync(__dirname + '/input.txt', 'utf-8')
-const inputs = raw.split('\n')
-
 const seatExpression = /([FB]{7})([RL]{3})/
 const FROM_BINARY = 2
 const ROW = ['F', 'B']
