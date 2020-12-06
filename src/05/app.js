@@ -1,6 +1,6 @@
-const { find } = require('lodash')
-
 const raw = require('fs').readFileSync(__dirname + '/input.txt', 'utf-8')
+const inputs = raw.split('\n')
+
 const seatExpression = /([FB]{7})([RL]{3})/
 const FROM_BINARY = 2
 const ROW = ['F', 'B']
@@ -26,7 +26,7 @@ console.log(HIGHEST_SEAT_ID)
 //Part Two
 function findMySeat() {
     const seats = inputs.map(convertToSeat).sort()
-    return seats.find((seat,i) => seats[i+1] - seat > 1) + 1
+,i) => seats[i+1] - seat > 1) + 1
 }
 
 console.log(findMySeat())
