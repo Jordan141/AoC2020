@@ -1,6 +1,4 @@
 const raw = require('fs').readFileSync(__dirname + '/input.txt', 'utf-8')
-const inputs = raw.split('\n')
-
 const seatExpression = /([FB]{7})([RL]{3})/
 const FROM_BINARY = 2
 const ROW = ['F', 'B']
@@ -13,20 +11,21 @@ function convertToSeat(code) {
     return rowNum * 8 + colNum
 }
 
-function parseSeat(string, letters) {
-    const lowerBound = new RegExp(`${letters[0]}`, 'g')
-    const upperBound = new RegExp(`${letters[1]}`, 'g')
-    return Number.parseInt(string.replace(lowerBound, '0').replace(upperBound, '1'), FROM_BINARY)
+function parseSeat(seatCode, keys) {
+    const lowerBound = new RegExp(`${keys[0]}`, 'g')
+    const upperBound = new RegExp(`${keys[1]}`, 'g')
+    return Number.parseInt(seatCode.replace(lowerBound, '0').replace(upperBound, '1'), FROM_BINARY)
 }
 
+const inputs = raw.split('\n').map(convertToSeat).sort((a, b) => a - b)
+
 //Part One
-const HIGHEST_SEAT_ID = inputs.reduce((max, curr) => Math.max(max, convertToSeat(curr)), 0)
+const HIGHEST_SEAT_ID = inputs.splice(-1)
 console.log(HIGHEST_SEAT_ID)
 
 //Part Two
-function findMySeat() {
-    const seats = inputs.map(convertToSeat).sort()
-,i) => seats[i+1] - seat > 1) + 1
+function findMySeat(arr) {
+    return arr.find((x,i) => arr[i+1]-x > 1) + 1
 }
 
-console.log(findMySeat())
+console.log(findMySeat(inputs))
