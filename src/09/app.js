@@ -35,4 +35,24 @@ function findInvalidElement(code) {
     }
 }
 
-console.log(findInvalidElement(inputs))
+console.time('Day 09 Solution')
+const invalidNumber = findInvalidElement(inputs)
+
+function findWeakness(code, invalidNum) {
+    for(let l = 2; l < code.length; l++) {
+        for(let i = 0; i < code.length - l + 1; i++) {
+            let sum = 0
+            for(let j = 0; j < l; j++) {
+                sum += code[i+j]
+            }
+            if(sum === invalidNum) {
+                const set = code.slice(i, i+l)
+                return Math.min(...set) + Math.max(...set)
+            }
+        }
+    }
+}
+
+console.timeEnd('Day 09 Solution')
+console.log('Part One:', invalidNumber)
+console.log('Part Two:', findWeakness(inputs, invalidNumber))
