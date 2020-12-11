@@ -28,10 +28,41 @@ function findJoltageDifference(adapters) {
     return jumpsOfOne * jumpsOfThree
 }
 
+const tribonacciSequence = [1, 1, 2, 4, 7, 13, 24, 44, 81, 149]
+
+function getTribonacci(num) {
+    if(num > tribonacciSequence.length) return
+    return tribonacciSequence[num - 1]
+}
+
+function totalDistinctSetups(adapters) {
+    const maxJoltage = adapters.sort((a, b) => a - b)[adapters.length - 1]
+    const a = adapters.concat([0, maxJoltage + 3]).sort((x, y) => x - y)
+
+    let multiplier = 1
+    let currentRun = 1
+    for(let joltage of a) {
+        if(adapters.includes(joltage + 1)) {
+            currentRun++
+        } else {
+            multiplier *= getTribonacci(currentRun)
+            currentRun = 1
+        }
+    }
+
+    return multiplier
+}
+
 
 function partOne(input) {
     const adapters = parseInput(input)
     return findJoltageDifference(adapters)
 }
 
+function partTwo(input) {
+    const adapters = parseInput(input)
+    return totalDistinctSetups(adapters)
+}
+
 console.log(partOne(raw))
+console.log(partTwo(raw))
