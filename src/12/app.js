@@ -42,4 +42,48 @@ function partOne(lines) {
     return Math.abs(posX) + Math.abs(posY)
 }
 
-console.log(partOne(input))
+function partTwo(input) {
+    let x = 0, y = 0, wx = 10, wy = 1
+
+    for(let i = 0; i < input.length; i++) {
+        const instr = input[i]
+        const dir = instr[0]
+        let value = Number(instr.substr(1))
+        if(dir === NORTH)
+            wy += value
+        else if(dir === SOUTH)
+            wy -= value
+        else if(dir === EAST)
+            wx += value
+        else if(dir === WEST)
+            wx -= value
+        else if(dir === RIGHT) {
+            while(value > 0) {
+                const tmp = wy
+                wy = -wx
+                wx = tmp
+                value -= 90
+            }
+        }
+        else if(dir === LEFT) {
+            while (value > 0) {
+                const tmp = wy
+                wy = wx
+                wx = -tmp
+                value -= 90
+              }
+        }
+        else if(dir === FORWARD) {
+            x += value * wx
+            y += value * wy
+        }
+    }
+
+    return Math.abs(x) + Math.abs(y)
+}
+console.time('Solution took... ')
+const p1 = partOne(input)
+const p2 = partTwo(input)
+console.timeEnd('Solution took... ')
+console.log(p1)
+console.log(p2)
