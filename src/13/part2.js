@@ -38,4 +38,7 @@ function run(buses) {
 }
 
 const input = parseInput('13,x,x,41,x,x,x,x,x,x,x,x,x,569,x,29,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,19,x,x,x,23,x,x,x,x,x,x,x,937,x,x,x,x,x,37,x,x,x,x,x,x,x,x,x,x,17')
-console.log(run(input))
+console.time('Solving CRT in...')
+const result = run(input)
+console.timeEnd('Solving CRT in...')
+console.log(result)
