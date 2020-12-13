@@ -30,3 +30,6 @@ const partOneResult = partOne([EARLIEST_TIMESTAMP, BUS_ROUTES])
 
 
 console.log(partOneResult)
+
+//Part Two completed using Wolfram because JS can't handle large numbers
+487905974205117
