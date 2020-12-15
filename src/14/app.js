@@ -1,35 +1,70 @@
-const { parse } = require('path')
-
 const raw = require('fs').readFileSync(__dirname + '/input.txt', 'utf-8')
-const input = raw.split('\n')
-const MASK = 'mask'
-const MAX_SIZE = 36
+
+const prepareInput = (rawInput) =>
+    rawInput
+        .split("\n")
+        .map((x) => x
+            .startsWith("mask")
+            ? x.match(/^mask \= (.*)/)[1]
+            : x
+            .match(/mem\[(\d+)\] \= (\d+)/)
+            .slice(1)
+            .map(BigInt)
+)
 
 function partOne(data) {
-    let mask, mem = {}
+    const input = prepareInput(data)
+    const memory = new Map()
 
-    data.forEach(i => {
-        let [cmd, val] = i.split(' = ')
-        if(cmd === MASK) return mask = val
+    let maskAND = 0n
+    let maskOR = 0n
 
-        cmd = parseInt(cmd.substr(4))
-        val = parseInt(val).toString(2).split('')
-
-        while(val.length < MAX_SIZE) val.unshift(0)
-
-        for(let j = 0; j < MAX_SIZE; j++) {
-            if(mask[j] != 'X') val[j] = mask[j]
+    input.forEach(item => {
+        if(typeof item === "string") {
+            maskAND = BigInt(parseInt(item.replace(/X/g, '1'), 2))
+            return maskOR = BigInt(parseInt(item.replace(/X/g, '0'), 2))
         }
-
-        val = parseInt(val.join().replace(/,/g, ''),2)
-        mem[cmd] = val
+        const [address, value] = item
+        const val = (value | maskOR) & maskAND
+        memory.set(address, val)
     })
-
-    let sum = 0
-    for(let i in mem) sum += mem[i]
-    return sum
+    return Number([...memory.values()].reduce((a, b) => a + b))
 }
 
-const sum = partOne(input)
+function partTwo(rawInput) {
+    const input = prepareInput(rawInput)
+    const memory = new Map()
 
-console.log(sum)
+    let maskOR = 0n
+    let floatsPos = []
+    
+    input.forEach(item => {
+        if(typeof item ==='string') {
+            maskOR = BigInt(parseInt(item.replace(/X/g, '0'), 2))
+            return floatsPos = Array.from(item.matchAll(/X/g), (x) => BigInt(x.index))
+        } 
+        const [address, value] = item
+        const addr = address | maskOR
+        const combinationsSize = 2 ** floatsPos.length
+
+        for (let i = 0n; i < combinationsSize; i++) {
+            let maskXOR = 0n
+            floatsPos.forEach((pos, index) => {
+                const pow = BigInt(index)
+                const isOn = (i & (2n ** pow)) !== 0n
+
+                if (isOn) maskXOR |= 1n << (36n - pos - 1n)
+            })
+
+            memory.set(addr ^ maskXOR, value)
+        }
+    })
+    return Number([...memory.values()].reduce((a, b) => a + b))
+}
+
+console.time("Time")
+const resultA = partOne(raw)
+const resultB = partTwo(raw)
+console.timeEnd("Time")
+console.log("Solution to part 1:", resultA)
+console.log("Solution to part 2:", resultB)
